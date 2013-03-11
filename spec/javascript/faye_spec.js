@@ -15,11 +15,12 @@ JS.ENV.FayeSpec = JS.Test.describe("Faye", function() { with(this) {
 
   describe("copyObject", function() { with(this) {
     before(function() { with(this) {
-      this.object = {foo: "bar", qux: 42, hey: null, obj: {bar: 67}}
+      this.now = new Date;
+      this.object = {foo: "bar", qux: 42, hey: null, obj: {bar: 67}, date: now}
     }})
 
     it("returns an equal object", function() { with(this) {
-      assertEqual( {foo: "bar", qux: 42, hey: null, obj: {bar: 67}},
+      assertEqual( {foo: "bar", qux: 42, hey: null, obj: {bar: 67}, date: now},
                    Faye.copyObject(object) )
     }})
 
@@ -29,6 +30,11 @@ JS.ENV.FayeSpec = JS.Test.describe("Faye", function() { with(this) {
 
     it("performs a deep clone", function() { with(this) {
       assertNotSame( object.obj, Faye.copyObject(object).obj )
+    }})
+
+    it("properly copies Dates", function() { with(this) {
+      assertEqual( object.date, Faye.copyObject(object).date )
+      assert( Faye.copyObject(object).date instanceof Date )
     }})
   }})
 }})

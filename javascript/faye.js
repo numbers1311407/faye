@@ -48,13 +48,18 @@ var Faye = {
 
   copyObject: function(object) {
     var clone, i, key;
-    if (object instanceof Array) {
+    if (object === undefined || object === null ) {
+      return object;
+    } else if (object instanceof Array) {
       clone = [];
       i = object.length;
       while (i--) clone[i] = Faye.copyObject(object[i]);
       return clone;
     } else if (typeof object === 'object') {
-      clone = (object === null) ? null : {};
+      if ('Date' === object.constructor.name) {
+        return new object.constructor(+object);
+      }
+      clone = {};
       for (key in object) clone[key] = Faye.copyObject(object[key]);
       return clone;
     } else {
